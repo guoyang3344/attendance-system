@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.attendance.mapper.UserMapper">
+
+    <resultMap id="UserResultMap" type="com.example.attendance.entity.User">
+        <id column="id" property="id"/>
+        <result column="username" property="username"/>
+        <result column="password" property="password"/>
+        <result column="real_name" property="realName"/>
+        <result column="email" property="email"/>
+        <result column="phone" property="phone"/>
+        <result column="status" property="status"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="deleted" property="deleted"/>
+        <collection property="roles" ofType="com.example.attendance.entity.Role">
+            <id column="role_id" property="id"/>
+            <result column="role_name" property="roleName"/>
+            <result column="role_code" property="roleCode"/>
+            <result column="description" property="description"/>
+        </collection>
+    </resultMap>
+
+    <select id="selectUserWithRolesByUsername" resultMap="UserResultMap">
+        SELECT 
+            u.id, u.username, u.password, u.real_name, u.email, u.phone, u.status, u.create_time, u.update_time, u.deleted,
+            r.id as role_id, r.role_name, r.role_code, r.description
+        FROM sys_user u
+        LEFT JOIN sys_user_role ur ON u.id = ur.user_id
+        LEFT JOIN sys_role r ON ur.role_id = r.id
+        WHERE u.username = #{username} AND u.deleted = 0
+    </select>
+
+    <select id="selectUserWithRolesById" resultMap="UserResultMap">
+        SELECT 
+            u.id, u.username, u.password, u.real_name, u.email, u.phone, u.status, u.create_time, u.update_time, u.deleted,
+            r.id as role_id, r.role_name, r.role_code, r.description
+        FROM sys_user u
+        LEFT JOIN sys_user_role ur ON u.id = ur.user_id
+        LEFT JOIN sys_role r ON ur.role_id = r.id
+        WHERE u.id = #{id} AND u.deleted = 0
+    </select>
+
+    <select id="selectPermissionsByUserId" resultType="java.lang.String">
+        SELECT DISTINCT p.permission_code
+        FROM sys_user u
+        LEFT JOIN sys_user_role ur ON u.id = ur.user_id
+        LEFT JOIN sys_role r ON ur.role_id = r.id
+        LEFT JOIN sys_role_permission rp ON r.id = rp.role_id
+        LEFT JOIN sys_permission p ON rp.permission_id = p.id
+        WHERE u.id = #{userId} AND u.deleted = 0 AND p.permission_code IS NOT NULL
+    </select>
+</mapper>
