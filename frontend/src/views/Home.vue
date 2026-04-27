@@ -22,11 +22,29 @@
         </el-menu-item>
         <el-menu-item index="/records">
           <el-icon><List /></el-icon>
-          <span>我的记录</span>
+          <span>打卡记录</span>
         </el-menu-item>
         <el-menu-item v-if="userStore.isChairman" index="/all-records">
           <el-icon><DataAnalysis /></el-icon>
-          <span>所有记录</span>
+          <span>所有打卡记录</span>
+        </el-menu-item>
+        <el-sub-menu index="leave">
+          <template #title>
+            <el-icon><Calendar /></el-icon>
+            <span>请假管理</span>
+          </template>
+          <el-menu-item index="/leave-apply">
+            <el-icon><Edit /></el-icon>
+            <span>申请请假</span>
+          </el-menu-item>
+          <el-menu-item index="/leave-records">
+            <el-icon><List /></el-icon>
+            <span>我的请假</span>
+          </el-menu-item>
+        </el-sub-menu>
+        <el-menu-item v-if="userStore.hasApprovalPermission" index="/leave-pending">
+          <el-icon><Bell /></el-icon>
+          <span>待审批</span>
         </el-menu-item>
       </el-menu>
     </el-aside>
@@ -67,7 +85,10 @@ import {
   List,
   DataAnalysis,
   User,
-  ArrowDown
+  ArrowDown,
+  Calendar,
+  Edit,
+  Bell
 } from '@element-plus/icons-vue'
 
 const route = useRoute()

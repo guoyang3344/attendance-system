@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.attendance.mapper.LeaveApprovalMapper">
+
+    <resultMap id="LeaveApprovalResultMap" type="com.example.attendance.entity.LeaveApproval">
+        <id column="id" property="id"/>
+        <result column="leave_id" property="leaveId"/>
+        <result column="approver_id" property="approverId"/>
+        <result column="approver_name" property="approverName"/>
+        <result column="approval_level" property="approvalLevel"/>
+        <result column="approval_status" property="approvalStatus"/>
+        <result column="approval_comment" property="approvalComment"/>
+        <result column="approval_time" property="approvalTime"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="deleted" property="deleted"/>
+    </resultMap>
+
+    <select id="selectByLeaveId" resultMap="LeaveApprovalResultMap">
+        SELECT * FROM leave_approval
+        WHERE leave_id = #{leaveId} AND deleted = 0
+        ORDER BY approval_level ASC, approval_time ASC
+    </select>
+
+    <select id="selectLastApprovalByLeaveId" resultMap="LeaveApprovalResultMap">
+        SELECT * FROM leave_approval
+        WHERE leave_id = #{leaveId} AND deleted = 0
+        ORDER BY approval_level DESC, approval_time DESC
+        LIMIT 1
+    </select>
+</mapper>

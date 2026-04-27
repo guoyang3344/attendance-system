@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.attendance.mapper.LeaveApplicationMapper">
+
+    <resultMap id="LeaveApplicationResultMap" type="com.example.attendance.entity.LeaveApplication">
+        <id column="id" property="id"/>
+        <result column="user_id" property="userId"/>
+        <result column="leave_type_id" property="leaveTypeId"/>
+        <result column="leave_type_name" property="leaveTypeName"/>
+        <result column="start_time" property="startTime"/>
+        <result column="end_time" property="endTime"/>
+        <result column="leave_days" property="leaveDays"/>
+        <result column="reason" property="reason"/>
+        <result column="status" property="status"/>
+        <result column="current_approval_level" property="currentApprovalLevel"/>
+        <result column="next_approver_id" property="nextApproverId"/>
+        <result column="rejected_by" property="rejectedBy"/>
+        <result column="rejected_comment" property="rejectedComment"/>
+        <result column="rejected_time" property="rejectedTime"/>
+        <result column="completed_time" property="completedTime"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="deleted" property="deleted"/>
+        <result column="user_name" property="userName"/>
+        <collection property="approvals" ofType="com.example.attendance.entity.LeaveApproval">
+            <id column="approval_id" property="id"/>
+            <result column="approval_leave_id" property="leaveId"/>
+            <result column="approver_id" property="approverId"/>
+            <result column="approver_name" property="approverName"/>
+            <result column="approval_level" property="approvalLevel"/>
+            <result column="approval_status" property="approvalStatus"/>
+            <result column="approval_comment" property="approvalComment"/>
+            <result column="approval_time" property="approvalTime"/>
+        </collection>
+    </resultMap>
+
+    <select id="selectByUserId" resultMap="LeaveApplicationResultMap">
+        SELECT la.*, u.real_name as user_name
+        FROM leave_application la
+        LEFT JOIN sys_user u ON la.user_id = u.id
+        WHERE la.user_id = #{userId} AND la.deleted = 0
+        ORDER BY la.create_time DESC
+    </select>
+
+    <select id="selectPendingByApprover" resultMap="LeaveApplicationResultMap">
+        SELECT la.*, u.real_name as user_name
+        FROM leave_application la
+        LEFT JOIN sys_user u ON la.user_id = u.id
+        WHERE la.current_approval_level = #{approvalLevel} 
+          AND la.status IN (0, 1)
+          AND la.deleted = 0
+        ORDER BY la.create_time ASC
+    </select>
+
+    <select id="selectAllWithUser" resultMap="LeaveApplicationResultMap">
+        SELECT la.*, u.real_name as user_name
+        FROM leave_application la
+        LEFT JOIN sys_user u ON la.user_id = u.id
+        WHERE la.deleted = 0
+        ORDER BY la.create_time DESC
+    </select>
+
+    <select id="selectWithApprovalsById" resultMap="LeaveApplicationResultMap">
+        SELECT la.*, u.real_name as user_name,
+               la2.id as approval_id, la2.leave_id as approval_leave_id, 
+               la2.approver_id, la2.approver_name, la2.approval_level,
+               la2.approval_status, la2.approval_comment, la2.approval_time
+        FROM leave_application la
+        LEFT JOIN sys_user u ON la.user_id = u.id
+        LEFT JOIN leave_approval la2 ON la.id = la2.leave_id
+        WHERE la.id = #{id} AND la.deleted = 0
+        ORDER BY la2.approval_level ASC, la2.approval_time ASC
+    </select>
+</mapper>

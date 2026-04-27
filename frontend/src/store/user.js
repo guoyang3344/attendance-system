@@ -20,6 +20,11 @@ export const useUserStore = defineStore('user', {
     },
     isChairman: (state) => {
       return state.permissions.includes('attendance:view:all')
+    },
+    hasApprovalPermission: (state) => {
+      return state.permissions.includes('leave:approve') || 
+             state.permissions.includes('leave:reject') ||
+             state.permissions.includes('leave:view:pending')
     }
   },
 
