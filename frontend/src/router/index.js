@@ -37,6 +37,24 @@ const routes = [
         name: 'AllRecords',
         component: () => import('../views/AllRecords.vue'),
         meta: { title: '所有打卡记录' }
+      },
+      {
+        path: 'leave-apply',
+        name: 'LeaveApply',
+        component: () => import('../views/LeaveApply.vue'),
+        meta: { title: '申请请假' }
+      },
+      {
+        path: 'leave-records',
+        name: 'LeaveRecords',
+        component: () => import('../views/LeaveRecords.vue'),
+        meta: { title: '我的请假' }
+      },
+      {
+        path: 'leave-pending',
+        name: 'LeavePending',
+        component: () => import('../views/LeavePending.vue'),
+        meta: { title: '待审批' }
       }
     ]
   }
