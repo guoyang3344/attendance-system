@@ -46,6 +46,28 @@
           <el-icon><Bell /></el-icon>
           <span>待审批</span>
         </el-menu-item>
+        <el-sub-menu index="system" v-if="userStore.isChairman">
+          <template #title>
+            <el-icon><Setting /></el-icon>
+            <span>系统管理</span>
+          </template>
+          <el-menu-item index="/organization">
+            <el-icon><Share /></el-icon>
+            <span>组织架构</span>
+          </el-menu-item>
+          <el-menu-item index="/employee-manage">
+            <el-icon><UserFilled /></el-icon>
+            <span>员工管理</span>
+          </el-menu-item>
+          <el-menu-item index="/role-manage">
+            <el-icon><User /></el-icon>
+            <span>角色管理</span>
+          </el-menu-item>
+        </el-sub-menu>
+        <el-menu-item v-if="!userStore.isChairman" index="/organization">
+          <el-icon><Share /></el-icon>
+          <span>组织架构</span>
+        </el-menu-item>
       </el-menu>
     </el-aside>
     <el-container>
@@ -85,10 +107,13 @@ import {
   List,
   DataAnalysis,
   User,
+  UserFilled,
   ArrowDown,
   Calendar,
   Edit,
-  Bell
+  Bell,
+  Setting,
+  Share
 } from '@element-plus/icons-vue'
 
 const route = useRoute()
