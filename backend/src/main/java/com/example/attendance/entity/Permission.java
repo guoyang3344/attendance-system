@@ -1,8 +1,11 @@
 package com.example.attendance.entity;
 
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+
+import java.util.List;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
@@ -18,4 +21,7 @@ public class Permission extends BaseEntity {
     private Long parentId;
 
     private String path;
+
+    @TableField(exist = false)
+    private List<Permission> children;
 }

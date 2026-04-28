@@ -55,6 +55,24 @@ const routes = [
         name: 'LeavePending',
         component: () => import('../views/LeavePending.vue'),
         meta: { title: '待审批' }
+      },
+      {
+        path: 'organization',
+        name: 'Organization',
+        component: () => import('../views/Organization.vue'),
+        meta: { title: '组织架构' }
+      },
+      {
+        path: 'employee-manage',
+        name: 'EmployeeManage',
+        component: () => import('../views/EmployeeManage.vue'),
+        meta: { title: '员工管理' }
+      },
+      {
+        path: 'role-manage',
+        name: 'RoleManage',
+        component: () => import('../views/RoleManage.vue'),
+        meta: { title: '角色管理' }
       }
     ]
   }
